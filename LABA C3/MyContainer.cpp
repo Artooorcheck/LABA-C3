@@ -82,9 +82,7 @@ void ModifyWithForeach(std::list<double>& list)
 
 double Average(std::list<double> list)
 {
-	double average=0;
-	std::for_each(list.begin(), list.end(), [&average](double a) {average += a; });
-	return average / list.size();
+	return Sum(list)/ list.size();
 }
 
 double Sum(std::list<double> list)
