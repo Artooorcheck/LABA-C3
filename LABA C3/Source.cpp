@@ -9,6 +9,12 @@
 
 Iterator FindPosByIndex(DoubleList list, int index);
 
+void TaskManager(int task, DoubleList& list);
+void ShowMenu(); 
+void Task1();
+bool Task2(DoubleList& list);
+void Task4(DoubleList& list);
+
 int main()
 {
 	DoubleList list;
@@ -19,159 +25,162 @@ int main()
 
 	while (true)
 	{
-		std::cout << "\nВыберите одну из представленных ниже команд:\n\n";
-		std::cout << "1. Сгенерировать Последовательность в файле\n";
-		std::cout << "2. Считать информацию из файла\n";
-		std::cout << "3. Уменьшить все значения на максимум\n";
-		std::cout << "4. Уменьшить все значения на максимум с i по j элемент\n";
-		std::cout << "5. Посчитать сумму элементов\n";
-		std::cout << "6. Посчитать среднее арифметическое\n";
-		std::cout << "7. Вывести список на экран\n";
-		std::cout << "8. Вывести список в файл\n";
-		std::cout << "9. Выход\n\n";
 
 		int task;
 
-		std::string fileName;
-
-		std::ifstream iFile;
-
-
+		ShowMenu();
 
 		std::cin >> task;
 
-		switch (task)
+		if (task > 2 && !existList&&task!=9)
 		{
-		case 1:
-
-			std::cout << "Введите имя файла\n";
-			std::cin >> fileName;
-
-			int N, M;
-
-			std::cout << "Введите количество чисел\n";
-			std::cin >> N;
-
-			std::cout << "Введите максимальный по модулю элемент\n";
-			std::cin >> M;
-
-			GenerateFile(fileName, N, M);
-			break;
-		case 2:
-
-			std::cout << "Введите имя файла\n";
-			std::cin >> fileName;
-			iFile.open(fileName);
-			if (iFile.is_open())
+			std::cout << "Список пока не существует\n";
+		}
+		else
+		{
+			if (task == 2)
 			{
-				list = ReadFileToList(iFile);
-				existList = true;
+				existList = Task2(list);
+			}
+			else if (task == 9)
+			{
+				return 0;
 			}
 			else
-				std::cout << "Не удалось открыть файл";
-			break;
-		case 3:
-			if (existList)
 			{
-				//list = Modify(list);
-				ModifyWithForeach(list);
-				//list = Transform(list);
+				TaskManager(task, list);
 			}
-
-			else
-				std::cout << "Список пока не существует\n";
-			break;
-		case 4:
-			if (existList)
-			{
-				int i, j;
-
-				std::cout << "Введите i\n";
-				std::cin >> i;
-
-				std::cout << "Введите j\n";
-				std::cin >> j;
-
-				if (i < j)
-				{
-					if (i > 0 && j < list.size() - 1)
-					{
-
-						Iterator iter1 = list.begin();
-
-						std::advance(iter1, i);
-
-						Iterator iter2 = list.begin();
-
-						std::advance(iter2, j);
-
-						Modify(list, iter1, iter2);
-					}
-					else
-					{
-						std::cout << "Не допустимые значения параметров: значения i и j должны лежать в диапазоне от 0 до " << list.size() - 1 << "\n";
-					}
-				}
-				else
-				{
-					std::cout << "Значение i не должно превышать j\n";
-				}
-			}
-			else
-				std::cout << "Список пока не существует\n";
-			break;
-		case 5:
-			if (existList)
-				std::cout <<"Сумма всех элементов = " << Sum(list);
-			else
-				std::cout << "Список пока не существует\n";
-			break;
-		case 6:
-			if (existList)
-				std::cout << "Среднее арифметическое всех элементов = " << Average(list);
-			else
-				std::cout << "Список пока не существует\n";
-			break;
-		case 7:
-			if (existList)
-			{
-				std::cout << "Список: ";
-				Print(list, std::cout);
-			}
-			else
-				std::cout << "Список пока не существует\n";
-			break;
-		case 8:
-			if (existList)
-			{
-				std::cout << "Введите имя файла\n";
-				std::cin >> fileName;
-				std::ofstream oFile(fileName);
-				Print(list, oFile);
-			}
-			else
-				std::cout << "Список пока не существует\n";
-			break;
-		case 9:
-			return 0;
-		default:
-			std::cout << "Неизвестная команда\n";
-			break;
 		}
 	}
 	return 0;
 }
 
-
-Iterator FindPosByIndex(DoubleList list, int index)
+void ShowMenu()
 {
-	int i = 0;
-	for (Iterator elem = list.begin(); elem != list.end(); elem++)
+	std::cout << "\nВыберите одну из представленных ниже команд:\n\n";
+	std::cout << "1. Сгенерировать Последовательность в файле\n";
+	std::cout << "2. Считать информацию из файла\n";
+	std::cout << "3. Уменьшить все значения на максимум\n";
+	std::cout << "4. Уменьшить все значения на максимум с i по j элемент\n";
+	std::cout << "5. Посчитать сумму элементов\n";
+	std::cout << "6. Посчитать среднее арифметическое\n";
+	std::cout << "7. Вывести список на экран\n";
+	std::cout << "8. Вывести список в файл\n";
+	std::cout << "9. Выход\n\n";
+}
+
+void Task1()
+{
+	std::string fileName;
+
+	std::cout << "Введите имя файла\n";
+	std::cin >> fileName;
+
+	int N, M;
+
+	std::cout << "Введите количество чисел\n";
+	std::cin >> N;
+
+	std::cout << "Введите максимальный по модулю элемент\n";
+	std::cin >> M;
+
+	GenerateFile(fileName, N, M);
+}
+
+bool Task2(DoubleList& list)
+{
+	std::ifstream iFile;
+
+	std::string fileName;
+
+	std::cout << "Введите имя файла\n";
+	std::cin >> fileName;
+	iFile.open(fileName);
+	if (iFile.is_open())
 	{
-		if (i == index)
+		list = ReadFileToList(iFile);
+		return true;
+	}
+	else
+		std::cout << "Файл не найден\n";
+	return false;
+}
+
+void Task4(DoubleList& list)
+{
+	int i, j;
+
+	std::cout << "Введите i\n";
+	std::cin >> i;
+
+	std::cout << "Введите j\n";
+	std::cin >> j;
+
+	if (i < j)
+	{
+		if (i > 0 && j <= list.size())
 		{
-			return elem;
+
+			Iterator iter1 = list.begin();
+
+			std::advance(iter1, i);
+
+			Iterator iter2 = list.begin();
+
+			std::advance(iter2, j);
+
+			Modify(list, iter1, iter2);
 		}
-		i++;
+		else
+		{
+			std::cout << "Не допустимые значения параметров: значения i и j должны лежать в диапазоне от 0 до " << list.size() << "\n";
+		}
+	}
+	else
+	{
+		std::cout << "Значение i не должно превышать j\n";
+	}
+}
+
+void TaskManager(int task, DoubleList& list)
+{
+	if (task == 1)
+	{
+		Task1();
+	}
+	else if (task == 3)
+	{
+		//list = Modify(list);
+		ModifyWithForeach(list);
+		//list = Transform(list);
+	}
+	else if (task == 4)
+	{
+		Task4(list);
+	}
+	else if (task == 5)
+	{
+		std::cout << "Сумма всех элементов = " << Sum(list);
+	}
+	else if (task == 6)
+	{
+		std::cout << "Среднее арифметическое всех элементов = " << Average(list);
+	}
+	else if (task == 7)
+	{
+		std::cout << "Список: ";
+		Print(list, std::cout);
+	}
+	else if (task == 8)
+	{
+		std::string fileName;
+		std::cout << "Введите имя файла\n";
+		std::cin >> fileName;
+		std::ofstream oFile(fileName);
+		Print(list, oFile);
+	}
+	else
+	{
+		std::cout << "Неизвестная команда\n";
 	}
 }

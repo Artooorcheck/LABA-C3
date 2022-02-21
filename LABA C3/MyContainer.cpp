@@ -5,18 +5,18 @@ std::ofstream& GenerateFile(std::string fileName, int N, int M)
 {
 	std::ofstream oFile(fileName);
 
-	std::list<double> list(N);
+	DoubleList list(N);
 
 	std::generate(list.begin(), list.end(), [M]() {return rand() % (2 * M) - M; });
 
-	std::for_each(list.begin(), list.end(), [&oFile](double a) {oFile << a << ' '; });
+	Print(list, oFile);
 
 	return oFile;
 }
 
-std::list<double> ReadFileToList(std::ifstream& iFile)
+DoubleList ReadFileToList(std::ifstream& iFile)
 {
-	std::list<double> list;
+	DoubleList list;
 
 	double number;
 
@@ -32,7 +32,7 @@ std::list<double> ReadFileToList(std::ifstream& iFile)
 	return list;
 }
 
-double FindMaxInList(std::list<double> list)
+double FindMaxInList(DoubleList list)
 {
 	double max = *list.begin();
 	for (Iterator i = list.begin(); i != list.end(); i++)
@@ -41,30 +41,32 @@ double FindMaxInList(std::list<double> list)
 	return max;
 }
 
-std::list<double> Modify(std::list<double> list)
+DoubleList Modify(DoubleList list)
 {
-	std::list<double> modifyList;
+	DoubleList modifyList;
 
 	double max = FindMaxInList(list);
 
 	for (Iterator i = list.begin(); i != list.end(); i++)
+	{
 		modifyList.push_back(*i - max);
+	}
 
 	return modifyList;
 }
 
-void Modify(std::list<double> list, Iterator& iter1, Iterator& iter2)
+void Modify(DoubleList list, Iterator iter1, Iterator iter2)
 {
 	double max = FindMaxInList(list);
 
 	for_each(iter1, iter2, [max](double &a) {a -= max; });
 }
 
-std::list<double> Transform(std::list<double> list)
+DoubleList Transform(DoubleList list)
 {
 	double max = FindMaxInList(list);
 
-	std::list<double> resultList;
+	DoubleList resultList;
 	
 	resultList.resize(list.size());
 
@@ -73,26 +75,26 @@ std::list<double> Transform(std::list<double> list)
 	return resultList;
 }
 
-void ModifyWithForeach(std::list<double>& list)
+void ModifyWithForeach(DoubleList& list)
 {
 	double max = FindMaxInList(list);
 
 	for_each(list.begin(), list.end(), [max](double &a) {a -= max; });
 }
 
-double Average(std::list<double> list)
+double Average(DoubleList list)
 {
 	return Sum(list)/ list.size();
 }
 
-double Sum(std::list<double> list)
+double Sum(DoubleList list)
 {
 	double sum = 0;
 	std::for_each(list.begin(), list.end(), [&sum](double a) {sum += a; });
 	return sum;
 }
 
-void Print(std::list<double> list, std::ostream& stream)
+void Print(DoubleList list, std::ostream& stream)
 {
 	std::for_each(list.begin(), list.end(), [&stream](double a) {stream << a << ' '; });
 }
