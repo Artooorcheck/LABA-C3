@@ -8,8 +8,7 @@
 #include<Windows.h>
 
 Iterator FindPosByIndex(DoubleList list, int index);
-
-void TaskManager(int task, DoubleList& list);
+int TaskManager(int task, DoubleList& list, bool& existList);
 void ShowMenu(); 
 void Task1();
 bool Task2(DoubleList& list);
@@ -32,24 +31,13 @@ int main()
 
 		std::cin >> task;
 
-		if (task > 2 && !existList&&task!=9)
+		if (task > 2 && !existList)
 		{
 			std::cout << "Список пока не существует\n";
 		}
-		else
+		else if(TaskManager(task, list, existList)==0)
 		{
-			if (task == 2)
-			{
-				existList = Task2(list);
-			}
-			else if (task == 9)
-			{
-				return 0;
-			}
-			else
-			{
-				TaskManager(task, list);
-			}
+			return 0;
 		}
 	}
 	return 0;
@@ -57,7 +45,8 @@ int main()
 
 void ShowMenu()
 {
-	std::cout << "\nВыберите одну из представленных ниже команд:\n\n";
+	std::cout << "\nВыберите одну из представленных ниже команд:\n";
+	std::cout << "0. Выход\n";
 	std::cout << "1. Сгенерировать Последовательность в файле\n";
 	std::cout << "2. Считать информацию из файла\n";
 	std::cout << "3. Уменьшить все значения на максимум\n";
@@ -65,8 +54,7 @@ void ShowMenu()
 	std::cout << "5. Посчитать сумму элементов\n";
 	std::cout << "6. Посчитать среднее арифметическое\n";
 	std::cout << "7. Вывести список на экран\n";
-	std::cout << "8. Вывести список в файл\n";
-	std::cout << "9. Выход\n\n";
+	std::cout << "8. Вывести список в файл\n\n";
 }
 
 void Task1()
@@ -106,6 +94,27 @@ bool Task2(DoubleList& list)
 	return false;
 }
 
+void TaskModify(DoubleList& list, int i, int j)
+{
+	if (i > 0 && j <= list.size())
+	{
+
+		Iterator iter1 = list.begin();
+
+		std::advance(iter1, i);
+
+		Iterator iter2 = list.begin();
+
+		std::advance(iter2, j);
+
+		Modify(list, iter1, iter2);
+	}
+	else
+	{
+		std::cout << "Не допустимые значения параметров: значения i и j должны лежать в диапазоне от 0 до " << list.size() << "\n";
+	}
+}
+
 void Task4(DoubleList& list)
 {
 	int i, j;
@@ -118,23 +127,7 @@ void Task4(DoubleList& list)
 
 	if (i < j)
 	{
-		if (i > 0 && j <= list.size())
-		{
-
-			Iterator iter1 = list.begin();
-
-			std::advance(iter1, i);
-
-			Iterator iter2 = list.begin();
-
-			std::advance(iter2, j);
-
-			Modify(list, iter1, iter2);
-		}
-		else
-		{
-			std::cout << "Не допустимые значения параметров: значения i и j должны лежать в диапазоне от 0 до " << list.size() << "\n";
-		}
+		TaskModify(list, i, j);
 	}
 	else
 	{
@@ -142,17 +135,32 @@ void Task4(DoubleList& list)
 	}
 }
 
-void TaskManager(int task, DoubleList& list)
+void Task8(DoubleList list)
 {
+	std::string fileName;
+	std::cout << "Введите имя файла\n";
+	std::cin >> fileName;
+	std::ofstream oFile(fileName);
+	Print(list, oFile);
+}
+
+int TaskManager(int task, DoubleList& list, bool& existList)
+{
+	if (task == 0)
+	{
+		return 0;
+	}
 	if (task == 1)
 	{
 		Task1();
 	}
 	else if (task == 3)
 	{
-		//list = Modify(list);
 		ModifyWithForeach(list);
-		//list = Transform(list);
+	}
+	else if (task == 2)
+	{
+		existList = Task2(list);
 	}
 	else if (task == 4)
 	{
@@ -173,14 +181,12 @@ void TaskManager(int task, DoubleList& list)
 	}
 	else if (task == 8)
 	{
-		std::string fileName;
-		std::cout << "Введите имя файла\n";
-		std::cin >> fileName;
-		std::ofstream oFile(fileName);
-		Print(list, oFile);
+		Task8(list);
 	}
 	else
 	{
 		std::cout << "Неизвестная команда\n";
 	}
+
+	return 1;
 }
