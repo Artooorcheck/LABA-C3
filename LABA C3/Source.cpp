@@ -141,7 +141,7 @@ void TaskManager(int task, DoubleList& list, bool& existList)
 	{
 		std::cout << "Список пока не существует\n";
 	}
-	if (task == 1)
+	else if (task == 1)
 	{
 		Task1();
 	}
