@@ -7,38 +7,23 @@
 #include"MyContainer.h"
 #include<Windows.h>
 
-Iterator FindPosByIndex(DoubleList list, int index);
-int TaskManager(int task, DoubleList& list, bool& existList);
-void ShowMenu(); 
-void Task1();
-bool Task2(DoubleList& list);
-void Task4(DoubleList& list);
+void TaskManager(int task, DoubleList& list, bool& existList);
+void ShowMenu();
 
 int main()
 {
-	DoubleList list;
-
-	bool existList = false;
-
 	SetConsoleOutputCP(1251);
 
-	while (true)
+	DoubleList list;
+	bool existList = false;
+	int task = 1;
+
+	while (task != 0)
 	{
-
-		int task;
-
 		ShowMenu();
 
 		std::cin >> task;
-
-		if (task > 2 && !existList)
-		{
-			std::cout << "Список пока не существует\n";
-		}
-		else if(TaskManager(task, list, existList)==0)
-		{
-			return 0;
-		}
+		TaskManager(task, list, existList);
 	}
 	return 0;
 }
@@ -144,11 +129,17 @@ void Task8(DoubleList list)
 	Print(list, oFile);
 }
 
-int TaskManager(int task, DoubleList& list, bool& existList)
+void Task7(DoubleList list)
 {
-	if (task == 0)
+	std::cout << "Список: ";
+	Print(list, std::cout);
+}
+
+void TaskManager(int task, DoubleList& list, bool& existList)
+{
+	if (task > 2 && !existList && task <= 8)
 	{
-		return 0;
+		std::cout << "Список пока не существует\n";
 	}
 	if (task == 1)
 	{
@@ -176,17 +167,14 @@ int TaskManager(int task, DoubleList& list, bool& existList)
 	}
 	else if (task == 7)
 	{
-		std::cout << "Список: ";
-		Print(list, std::cout);
+		Task7(list);
 	}
 	else if (task == 8)
 	{
 		Task8(list);
 	}
-	else
+	else if (task != 0)
 	{
 		std::cout << "Неизвестная команда\n";
 	}
-
-	return 1;
 }
